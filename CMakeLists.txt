@@ -28,6 +28,12 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(gitversion)
 get_git_version(SLANG_VERSION_MAJOR SLANG_VERSION_MINOR SLANG_VERSION_PATCH
                 SLANG_VERSION_HASH SLANG_VERSION_STRING)
+# FIXME: Circumvent broken get_git_version
+set(SLANG_VERSION_MAJOR  0)
+set(SLANG_VERSION_MINOR  1)
+set(SLANG_VERSION_PATCH  0)
+set(SLANG_VERSION_HASH   acdef)
+set(SLANG_VERSION_STRING 0.1.0)
 
 # Set the default build type if none is set explicitly, but only for
 # single-config generators.
