@@ -36,11 +36,11 @@ FetchContent_MakeAvailable(unordered_dense)
 
 if(SLANG_INCLUDE_INSTALL)
   install(
-    DIRECTORY ../external/ieee1800/
+    DIRECTORY external/ieee1800/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ieee1800
     COMPONENT slang_Development)
   install(
-    FILES ../external/flat_hash_map.hpp ../external/span.hpp
+    FILES external/flat_hash_map.hpp external/span.hpp
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     COMPONENT slang_Development)
   install(

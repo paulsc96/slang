@@ -86,8 +86,8 @@ add_subdirectory(ast)
 add_library(slang::slang ALIAS slang_slang)
 set_target_properties(
   slang_slang
-  PROPERTIES CXX_VISIBILITY_PRESET hidden
-             VISIBILITY_INLINES_HIDDEN YES
+  PROPERTIES CXX_VISIBILITY_PRESET default
+             VISIBILITY_INLINES_HIDDEN NO
              VERSION ${PROJECT_VERSION}
              SOVERSION ${PROJECT_VERSION_MAJOR}
              EXPORT_NAME slang
@@ -160,7 +160,11 @@ if(SLANG_INCLUDE_INSTALL)
   install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/slang/syntax/AllSyntax.h
           ${CMAKE_CURRENT_BINARY_DIR}/slang/syntax/SyntaxKind.h
-          ${CMAKE_CURRENT_BINARY_DIR}/slang/parsing/TokenKind.h
+          ${CMAKE_CURRENT_BINARY_DIR}/slang/syntax/SyntaxFwd.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/slang/syntax/
+    COMPONENT slang_Development)
+  install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/slang/parsing/TokenKind.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/slang/parsing/
     COMPONENT slang_Development)
 endif()
