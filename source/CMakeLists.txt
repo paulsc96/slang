@@ -167,4 +167,8 @@ if(SLANG_INCLUDE_INSTALL)
     FILES ${CMAKE_CURRENT_BINARY_DIR}/slang/parsing/TokenKind.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/slang/parsing/
     COMPONENT slang_Development)
+  install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/slang_export.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    COMPONENT slang_Development)
 endif()
