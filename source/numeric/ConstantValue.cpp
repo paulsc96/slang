@@ -19,9 +19,12 @@ struct always_false : std::false_type {};
 
 const ConstantValue ConstantValue::Invalid;
 
-std::string ConstantValue::toString(bitwidth_t abbreviateThresholdBits, bool exactUnknowns) const {
+std::string ConstantValue::toString(bitwidth_t abbreviateThresholdBits, bool exactUnknowns,
+                                    bool useAssignmentPatterns) const {
     return std::visit(
-        [abbreviateThresholdBits, exactUnknowns](auto&& arg) {
+        [abbreviateThresholdBits, exactUnknowns, useAssignmentPatterns](auto&& arg) {
+            auto openCont = useAssignmentPatterns ? "'{"sv : "["sv;
+            auto closeCont = useAssignmentPatterns ? "}"sv : "]"sv;
             using T = std::decay_t<decltype(arg)>;
             if constexpr (std::is_same_v<T, std::monostate>)
                 return "<unset>"s;
@@ -37,7 +40,7 @@ std::string ConstantValue::toString(bitwidth_t abbreviateThresholdBits, bool exa
                 return "$"s;
             else if constexpr (std::is_same_v<T, Elements>) {
                 FormatBuffer buffer;
-                buffer.append("'{");
+                buffer.append(openCont);
                 for (auto& element : arg) {
                     buffer.append(element.toString(abbreviateThresholdBits));
                     buffer.append(",");
@@ -45,14 +48,14 @@ std::string ConstantValue::toString(bitwidth_t abbreviateThresholdBits, bool exa
 
                 if (!arg.empty())
                     buffer.pop_back();
-                buffer.append("}");
+                buffer.append(closeCont);
                 return buffer.str();
             }
             else if constexpr (std::is_same_v<T, std::string>)
                 return fmt::format("\"{}\"", arg);
             else if constexpr (std::is_same_v<T, Map>) {
                 FormatBuffer buffer;
-                buffer.append("'{");
+                buffer.append(openCont);
                 for (auto& [key, val] : *arg)
                     buffer.format("{}:{},", key.toString(abbreviateThresholdBits),
                                   val.toString(abbreviateThresholdBits));
@@ -63,12 +66,12 @@ std::string ConstantValue::toString(bitwidth_t abbreviateThresholdBits, bool exa
                 else if (!arg->empty())
                     buffer.pop_back();
 
-                buffer.append("}");
+                buffer.append(closeCont);
                 return buffer.str();
             }
             else if constexpr (std::is_same_v<T, Queue>) {
                 FormatBuffer buffer;
-                buffer.append("'{");
+                buffer.append(openCont);
                 for (auto& element : *arg) {
                     buffer.append(element.toString(abbreviateThresholdBits));
                     buffer.append(",");
@@ -76,7 +79,7 @@ std::string ConstantValue::toString(bitwidth_t abbreviateThresholdBits, bool exa
 
                 if (!arg->empty())
                     buffer.pop_back();
-                buffer.append("}");
+                buffer.append(closeCont);
                 return buffer.str();
             }
             else if constexpr (std::is_same_v<T, Union>) {
